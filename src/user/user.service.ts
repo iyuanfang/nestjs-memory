@@ -1,26 +1,37 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { User } from './user.entity'
+import { ObjectId } from 'mongodb'
 
 @Injectable()
 export class UserService {
+  private readonly logger = new Logger(UserService.name)
   constructor(
-    @InjectRepository(User) private usersRepository: Repository<User>,
+    @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
-  async findAll(): Promise<User[]> {
-    return await this.usersRepository.find()
+  findAll(): Promise<User[]> {
+    this.logger.debug('find all')
+    return this.userRepository.find()
   }
-  find(id: string): string {
-    if (id == '2') {
-      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN)
-    } else {
-      return `Return a #${id} user`
-    }
+  find(id: string): Promise<User> {
+    this.logger.debug(`Find user id:${id}`)
+    return this.userRepository.findOne({ _id: new ObjectId(id) })
   }
 
-  delete(id: string): string {
-    return `Delete a #${id} user`
+  create(user: User): Promise<User> {
+    this.logger.debug(`Save user:${user.name}`)
+    return this.userRepository.save(user)
+  }
+
+  update(id: string, user: User) {
+    this.logger.debug(`Update user id:${id}`)
+    this.userRepository.update({ _id: new ObjectId(id) }, user)
+  }
+
+  delete(id: string) {
+    this.logger.debug(`Remove user id:${id}`)
+    this.userRepository.delete({ _id: new ObjectId(id) })
   }
 }
