@@ -15,8 +15,8 @@ import { UserService } from './user.service'
 export class UserController {
   constructor(private userService: UserService) {}
   @Get()
-  findAll(): string {
-    return this.userService.findAll()
+  async findAll(): Promise<string> {
+    return await JSON.stringify(this.userService.findAll())
   }
 
   @Get(':id')
@@ -36,6 +36,6 @@ export class UserController {
 
   @Delete(':id')
   delete(@Param('id') id: string): string {
-    return `Delete a #${id} user`
+    return this.userService.delete(id)
   }
 }

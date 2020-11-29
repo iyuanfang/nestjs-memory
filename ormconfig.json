@@ -1,0 +1,19 @@
+{
+    "type": "mongodb",
+    "host": "localhost",
+    "database": "memory",
+    "synchronize": true,
+    "logging": false,
+    "entities": ["dist/**/*.entity{.ts,.js}"],
+    "subscribers": [
+        "src/subscriber/*.js"
+    ],
+    "migrations": [
+        "src/migration/*.js"
+    ],
+    "cli": {
+        "entitiesDir": "src/entity",
+        "migrationsDir": "src/migration",
+        "subscribersDir": "src/subscriber"
+    }
+}
