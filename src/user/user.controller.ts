@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Put,
+} from '@nestjs/common'
 import { User } from './user.entity'
 import { UserService } from './user.service'
 
@@ -38,6 +47,14 @@ export class UserController {
   update(@Body() updateCatDTO: any, @Param('id') id: string) {
     const user: User = Object.assign(new User(), updateCatDTO)
     this.userService.update(id, user)
+  }
+
+  @Patch(':id')
+  async patch(@Param('id') id: string, @Body() userJson: any) {
+    let user: User = await this.userService.find(id)
+    user = Object.assign(user, userJson)
+    this.userService.update(id, user)
+    return 'Patching a user #' + id + ':' + JSON.stringify(userJson)
   }
 
   @Delete(':id')
