@@ -10,6 +10,18 @@ export class UserController {
     return JSON.stringify(await this.userService.findAll())
   }
 
+  @Get('name/:name')
+  getName(@Param('name') name: string) {
+    return this.userService.isNameExist(name)
+  }
+
+  @Post('login')
+  login(@Body() loginForm: any) {
+    const name = loginForm.name
+    const pwd = loginForm.pwd
+    return this.userService.login(name, pwd)
+  }
+
   @Get(':id')
   async find(@Param('id') id: string): Promise<string> {
     return JSON.stringify(await this.userService.find(id))

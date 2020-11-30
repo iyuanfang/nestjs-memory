@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing'
+import { response } from 'express'
 import { UserController } from './user.controller'
 
 describe('UserController', () => {
@@ -14,5 +15,10 @@ describe('UserController', () => {
 
   it('should be defined', () => {
     expect(controller).toBeDefined()
+  })
+
+  it('has user', async () => {
+    const s: string = await controller.findAll()
+    expect(s.length).toBeGreaterThan(0)
   })
 })

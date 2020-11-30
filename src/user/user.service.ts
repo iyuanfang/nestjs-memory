@@ -34,4 +34,25 @@ export class UserService {
     this.logger.debug(`Remove user id:${id}`)
     this.userRepository.delete({ _id: new ObjectId(id) })
   }
+  async isNameExist(name: string): Promise<boolean> {
+    const user: User = await this.userRepository.findOne({ name: name })
+    if (user) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  async login(name: string, pwd: string): Promise<string> {
+    const user: User = await this.userRepository.findOne({
+      name: name,
+      pwd: pwd,
+    })
+    this.logger.debug(`Login user:${name}`)
+    if (!user) {
+      return ''
+    } else {
+      return String(user._id)
+    }
+  }
 }
