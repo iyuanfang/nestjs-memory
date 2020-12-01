@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { response } from 'express'
 import { UserController } from './user.controller'
 
 describe('UserController', () => {

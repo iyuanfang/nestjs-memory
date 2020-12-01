@@ -7,7 +7,10 @@ import {
   Patch,
   Post,
   Put,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common'
+import { FileInterceptor } from '@nestjs/platform-express'
 import { User } from './user.entity'
 import { UserService } from './user.service'
 
@@ -60,5 +63,22 @@ export class UserController {
   @Delete(':id')
   delete(@Param('id') id: string) {
     this.userService.delete(id)
+  }
+
+  @Post('avatar/:id')
+  @UseInterceptors(FileInterceptor('avatar'))
+  async avatar(@UploadedFile() file: any, @Param('id') id: string) {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const sharp = require('sharp')
+    console.log(file)
+
+    const path = file.path
+    sharp(path)
+      .resize(100, 100)
+      .toFile(path + '.jpg')
+    const user: User = await this.userService.find(id)
+    user.avatar = file.filename + '.jpg'
+    this.userService.update(id, user)
+    return user.avatar
   }
 }

@@ -29,8 +29,8 @@ export class MemoryService {
     const memories = await this.memoryRepository.find({
       where: { user_id: user_id },
       order: { date: 'DESC' },
-      //   take: take,
-      //   skip: skip,
+      take: take,
+      skip: skip,
     })
     return memories
   }

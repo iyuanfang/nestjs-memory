@@ -25,11 +25,15 @@
     "@nestjs/core": "^7.5.1",
     "@nestjs/platform-express": "^7.5.1",
     "@nestjs/typeorm": "^7.1.5",
+    "@types/multer": "^1.4.4",
+    "@types/sharp": "^0.26.1",
     "mongodb": "^3.6.3",
+    "multer": "^1.4.2",
     "mysql": "^2.18.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.6.3",
+    "sharp": "^0.26.3",
     "typeorm": "^0.2.29"
   },
   "devDependencies": {

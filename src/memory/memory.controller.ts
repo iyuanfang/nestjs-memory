@@ -1,6 +1,17 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UploadedFiles,
+  UseInterceptors,
+} from '@nestjs/common'
 import { MemoryService } from './memory.service'
 import { Memory } from './memory.entity'
+import { FilesInterceptor } from '@nestjs/platform-express'
 
 @Controller('memory')
 export class MemoryController {
@@ -22,7 +33,9 @@ export class MemoryController {
     @Param('take') take: number,
     @Param('skip') skip: number,
   ) {
-    return JSON.stringify(await this.memoryService.getByUser(id, take, skip))
+    return JSON.stringify(
+      await this.memoryService.getByUser(id, Number(take), Number(skip)),
+    )
   }
 
   @Post()
@@ -46,20 +59,20 @@ export class MemoryController {
     return 'Deleted memory #' + id
   }
 
-  //   @Post('upload')
-  //   async avatar(
-  //     @UploadedFiles('memory', { options: memoryUploadOptions }) files: any[],
-  //   ) {
-  //     console.log("upload memory':", files)
-  //     var sharp = require('sharp')
-  //     let imgs = []
-  //     for (let file of files) {
-  //       imgs.push(file.filename)
-  //       let path = file.path
-  //       sharp(path)
-  //         .resize(360, 270)
-  //         .toFile(path + '.jpg') //创建压缩图，直接加.jpg
-  //     }
-  //     return imgs
-  //   }
+  @Post('upload')
+  @UseInterceptors(FilesInterceptor('memory'))
+  async upload(@UploadedFiles() files: any[]) {
+    console.log("upload memory':", files)
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const sharp = require('sharp')
+    const imgs = []
+    for (const file of files) {
+      imgs.push(file.filename)
+      const path = file.path
+      sharp(path)
+        .resize(360, 270)
+        .toFile(path + '.jpg') //创建压缩图，直接加.jpg
+    }
+    return imgs
+  }
 }
