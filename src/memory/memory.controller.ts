@@ -12,6 +12,7 @@ import {
 import { MemoryService } from './memory.service'
 import { Memory } from './memory.entity'
 import { FilesInterceptor } from '@nestjs/platform-express'
+import * as sharp from 'sharp'
 
 @Controller('memory')
 export class MemoryController {
@@ -63,8 +64,6 @@ export class MemoryController {
   @UseInterceptors(FilesInterceptor('memory'))
   async upload(@UploadedFiles() files: any[]) {
     console.log("upload memory':", files)
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const sharp = require('sharp')
     const imgs = []
     for (const file of files) {
       imgs.push(file.filename)

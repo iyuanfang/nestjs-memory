@@ -13,6 +13,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express'
 import { User } from './user.entity'
 import { UserService } from './user.service'
+import * as sharp from 'sharp'
 
 @Controller('user')
 export class UserController {
@@ -68,10 +69,7 @@ export class UserController {
   @Post('avatar/:id')
   @UseInterceptors(FileInterceptor('avatar'))
   async avatar(@UploadedFile() file: any, @Param('id') id: string) {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const sharp = require('sharp')
     console.log(file)
-
     const path = file.path
     sharp(path)
       .resize(100, 100)
