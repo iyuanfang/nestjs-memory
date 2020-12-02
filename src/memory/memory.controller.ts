@@ -62,7 +62,7 @@ export class MemoryController {
 
   @Post('upload')
   @UseInterceptors(FilesInterceptor('memory'))
-  async upload(@UploadedFiles() files: any[]) {
+  async upload(@UploadedFiles() files: any[], @Body() memoryJson: any) {
     console.log("upload memory':", files)
     const imgs = []
     for (const file of files) {
@@ -72,6 +72,10 @@ export class MemoryController {
         .resize(360, 270)
         .toFile(path + '.jpg') //创建压缩图，直接加.jpg
     }
-    return imgs
+    const memory: Memory = Object.assign(new Memory(), memoryJson)
+    memory.date = new Date()
+    memory.imgs = imgs
+    console.log('save memory:', memory)
+    this.memoryService.save(memory)
   }
 }
